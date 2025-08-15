@@ -1,43 +1,51 @@
 @use '../abstracts/_colors' as *;
 
-// NOTE: Deprecation flag
-// https://material.io/blog/tone-based-surface-color-m3
-// ----------------------------------------------------
-// Surface Container Lowest is a new role
-// Surface at elevation +1 becomes Surface Container Low
-// Surface at elevation +2 becomes Surface Container
-// Surface at elevation +3 becomes Surface Container High
-// Surface at elevation +4 and +5 are being deprecated, it is recommended to use Surface Container Highest by default as a replacement. As an alternative Surface Container High, or Surface Dim can be used depending on the specific use case.
-// Surface Variant becomes Surface Container Highest
-
 $light-theme: (
-  primary: map-get($primary, 40),
-  on-primary: map-get($primary, 100),
-  inverse-primary: map-get($primary, 80),
-  primary-container: map-get($primary, 90),
-  on-primary-container: map-get($primary, 10),
-  secondary: map-get($secondary, 40),
-  on-secondary: map-get($secondary, 100),
-  secondary-container: map-get($secondary, 90),
-  on-secondary-container: map-get($secondary, 10),
-  tertiary: map-get($tertiary, 40),
-  on-tertiary: map-get($tertiary, 100),
-  tertiary-container: map-get($tertiary, 90),
-  on-tertiary-container: map-get($tertiary, 10),
-  error: map-get($error, 40),
-  on-error: map-get($error, 100),
-  error-container: map-get($error, 90),
-  on-error-container: map-get($error, 10),
-  surface-container-lowest: map-get($neutral, 100),
-  surface-container-low: map-get($neutral, 98),
-  surface-container: map-get($neutral-variant, 95),
-  surface-container-high: map-get($neutral-variant, 90),
-  surface-container-highest: map-get($neutral-variant, 90),
-  inverse-surface: map-get($neutral, 20),
-  inverse-on-surface: map-get($neutral, 95),
-  surface-variant: map-get($neutral-variant, 90),
-  on-surface-variant: map-get($neutral-variant, 30),
-  on-surface: map-get($neutral, 10),
-  outline: map-get($neutral-variant, 50),
-  outline-variant: map-get($neutral-variant, 80),
+  shade-1: map-get($primary, 0),
+  shade-2: map-get($primary, 10),
+  shade-3: map-get($primary, 20),
+  shade-4: map-get($primary, 30),
+  shade-5: map-get($primary, 40),
+  shade-6: map-get($primary, 50),
+  shade-7: map-get($primary, 60),
+  primary: map-get($primary, 70),
+  tint-7: map-get($primary, 80),
+  tint-6: map-get($primary, 90),
+  tint-5: map-get($primary, 92),
+  tint-4: map-get($primary, 94),
+  tint-3: map-get($primary, 96),
+  tint-2: map-get($primary, 98),
+  tint-1: map-get($primary, 100),
+
+  black: map-get($neutral, 0),
+  gray-10: map-get($neutral, 5),
+  gray-9: map-get($neutral, 10),
+  gray-8: map-get($neutral, 20),
+  gray-7: map-get($neutral, 30),
+  gray-6: map-get($neutral, 40),
+  gray-5: map-get($neutral, 50),
+  gray-4: map-get($neutral, 60),
+  gray-3: map-get($neutral, 70),
+  gray-2: map-get($neutral, 80),
+  gray-1: map-get($neutral, 90),
+  white: map-get($neutral, 100),
+
+  error: map-get($state, error),
+  error-light: map-get($state, error-light),
+  error-bg: map-get($state, error-bg),
+  warning: map-get($state, warning),
+  warning-light: map-get($state, warning-light),
+  warning-bg: map-get($state, warning-bg),
+  success: map-get($state, success),
+  success-light: map-get($state, success-light),
+  success-bg: map-get($state, success-bg),
+
+  light-blue: map-get($others, light-blue),
+  dark-green: map-get($others, dark-green),
+  light-green: map-get($others, light-green),
+  dark-purple: map-get($others, dark-purple),
+  light-purple: map-get($others, light-purple),
+  orange: map-get($others, light-orange),
+  yellow: map-get($others, light-yellow),
+  light-orange: map-get($others, deep-light-orange)
 );
