@@ -80,14 +80,13 @@ const paddings = computed(() => ({
 <style lang="scss" scoped>
 .text-field {
   &__main {
-    display: flex;
-    align-items: center;
+    @include flex($align: center);
     position: relative;
-    gap: 16px;
-    padding: 8px;
+    gap: space(4);
+    padding: space(2);
     border: 1px solid var(--palette-gray-4);
     height: 60px;
-    border-radius: 8px;
+    border-radius: $radius-4x;
     padding-left: v-bind('paddings.leading');
     padding-right: v-bind('paddings.trailing');
     transition: background-color 0.2s;
