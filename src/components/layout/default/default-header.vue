@@ -26,6 +26,7 @@
 <style scoped lang="scss">
   .header {
     @include flex($align: center, $justify: space-between);
+    background-color: var(--palette-white);
     position:fixed;
     top:0;
     right:0;
