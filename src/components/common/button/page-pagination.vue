@@ -1,0 +1,91 @@
+<template>
+  <div class="pagination">
+    <icon-button
+      class="pagination__icon-btn"
+      styleType="filled"
+      iconName="back"
+      :disabled="currentPage === 1"
+      @click="changePage(currentPage - 1)"
+    />
+
+    <div class="pagination__pages pages">
+      <button
+        class="pages__btn"
+        v-for="page in totalPages"
+        :key="page"
+        :class="{ active: currentPage === page }"
+        @click="changePage(page)"
+      >
+        {{ page }}
+      </button>
+    </div>
+
+    <icon-button
+      class="pagination__icon-btn"
+      styleType="filled"
+      iconName="next"
+      :disabled="currentPage === totalPages"
+      @click="changePage(currentPage + 1)"
+    />
+  </div>
+</template>
+
+<script setup>
+  import { defineProps, defineEmits, computed } from 'vue';
+  import IconButton from '@/components/common/button/icon-button.vue';
+
+  const props = defineProps({
+    totalItems: { type: Number, required: true },
+    itemsPerPage: { type: Number, required: true },
+    modelValue: { type: Number, default: 1 },
+  });
+
+  const emits = defineEmits(['update:modelValue']);
+
+  const currentPage = computed({
+    get: () => props.modelValue,
+    set: (value) => emits('update:modelValue', value),
+  });
+
+  const totalPages = computed(() =>
+    Math.ceil(props.totalItems / props.itemsPerPage)
+  );
+
+  const changePage = (page) => {
+    if (page >= 1 && page <= totalPages.value) {
+      currentPage.value = page;
+    }
+  };
+</script>
+
+<style lang="scss" scoped>
+  .pagination {
+    @include flex($align: center, $justify: center);
+    gap: space(2);
+
+    &__icon-btn {
+      --base-icon-button-color: var(--palette-primary);
+    }
+  }
+
+  .pages {
+    @include flex($align: center);
+    gap:space(9);
+    padding:0 space(9);
+    border: 1px solid var(--palette-gray-4);
+    border-radius: $radius-6x;
+    height: 56px;
+
+    &__btn {
+    border: 1px solid var(--palette-gray-8);
+    width:32px;
+    height: 32px;
+    border-radius: $circle;
+    }
+
+    .pages__btn.active {
+      background-color: var(--palette-tint-6);
+      border-color:var(--palette-tint-6) ;
+    }
+  }
+</style>
