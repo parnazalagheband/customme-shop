@@ -19,7 +19,6 @@ export const actions = {
           image: image ? image.attributes.original_url : null,
         };
       });
-      localStorage.setItem('productsWithImages', JSON.stringify(this.products));
     } catch (error) {
       console.error(error);
     } finally {
@@ -28,16 +27,6 @@ export const actions = {
   },
 
   sortProducts(sortBy) {
-    this.products.forEach((p) => {
-      console.log(
-        'id:',
-        p.id,
-        'updated_at:',
-        new Date(p.available_on),
-        'available_on:',
-        p.available_on
-      );
-    });
 
     switch (sortBy) {
       case 'most_expensive':

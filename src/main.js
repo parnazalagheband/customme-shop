@@ -1,7 +1,7 @@
 import { createApp as createVueApp } from 'vue';
 import App from '@/App.vue';
 import '@/assets/scss/style.scss';
-import  axiosPlugin  from '@/plugins/axios.js';
+import { axiosPlugin } from '@/plugins/axios.js';
 import router from '@/router';
 import { createPinia } from 'pinia';
 
