@@ -60,11 +60,13 @@
   .product {
     border: 1px solid var(--palette-gray-5);
     border-radius: $radius-4x;
-    padding: space(5);
+    padding: space(4);
+    flex: 0 0 calc(33.333% - #{space(4)}); 
+    max-width: calc(33.333% - #{space(4)});
 
     &__image-container {
-      width: 280px;
-      height: 280px;
+      width:100%;
+      height: 100%;
       overflow: hidden;
       border-radius: $radius-2x;
     }

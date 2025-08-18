@@ -54,7 +54,7 @@
 <style scoped lang="scss">
   .container {
     @include flex();
-    padding: space(30);
+    padding: space(30) ;
 
     &__products-wrapper {
       width: 80%;
@@ -67,13 +67,13 @@
 
   .products-wrapper {
     &__product-list {
-      margin-top: space(5);
+      margin-top: space(7);
     }
   }
 
   .product-list {
-    @include flex($wrap: wrap, $justify: space-between);
-    gap: space(4);
+    @include flex($wrap: wrap);
+    gap: space(6);
 
     &__pagination{
       margin-top:space(10);
