@@ -85,7 +85,7 @@ const paddings = computed(() => ({
     gap: space(4);
     padding: space(2);
     border: 1px solid var(--palette-gray-4);
-    height: 60px;
+    height: 48px;
     border-radius: $radius-4x;
     padding-left: v-bind('paddings.leading');
     padding-right: v-bind('paddings.trailing');

@@ -1,15 +1,35 @@
 import api from '@/plugins/axios.js';
 
 export const actions = {
-  async getProducts() {
+  async getProducts(sortBy = 'all') {
     this.loading = true;
     try {
-      const response = await api.get('/products?include=images');
-      console.log(response.data.data);
+      let sortParam = '';
+      switch (sortBy) {
+        case 'most_expensive':
+          sortParam = '-price';
+          break;
+        case 'cheapest':
+          sortParam = 'price';
+          break;
+        case 'newest':
+          sortParam = '-available_on';
+          break;
+        case 'all':
+        default:
+          sortParam = '';
+      }
+
+      const response = await api.get('/products', {
+        params: {
+          include: 'images',
+          sort: sortParam || undefined,
+        },
+      });
+
       this.products = response.data.data;
       this.images =
         response.data.included?.filter((item) => item.type === 'image') || [];
-      console.log(this.images);
 
       this.products = this.products.map((product) => {
         const imageId = product.relationships.images.data?.[0]?.id;
@@ -17,40 +37,13 @@ export const actions = {
         return {
           id: product.id,
           ...product.attributes,
-          images: image ? image.attributes.styles : null,
+          images: image ? image.attributes.styles : [],
         };
       });
     } catch (error) {
       console.error(error);
     } finally {
       this.loading = false;
-    }
-  },
-
-  sortProducts(sortBy) {
-    switch (sortBy) {
-      case 'most_expensive':
-        return [...this.products].sort(
-          (a, b) => Number(b.price) - Number(a.price)
-        );
-
-      case 'cheapest':
-        return [...this.products].sort(
-          (a, b) => Number(a.price) - Number(b.price)
-        );
-
-      case 'newest':
-        return [...this.products].sort(
-          (a, b) =>
-            new Date(b.available_on).getTime() -
-            new Date(a.available_on).getTime()
-        );
-
-      case 'all':
-        return this.products;
-
-      default:
-        return this.products;
     }
   },
 };

@@ -2,7 +2,7 @@
   <div class="container">
     <div class="container__filter-box filter-box"></div>
     <div class="container__products-wrapper products-wrapper">
-      <sorting-bar @select="filterSelect" />
+      <sorting-bar @select="sortProduct" />
       <div class="products-wrapper__product-list product-list">
         <MainProduct
           v-for="product in paginatedProducts"
@@ -21,34 +21,32 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from 'vue';
-  import { useProductStore } from '@/store/products';
-  import MainProduct from '@/components/view/products/main-product.vue';
-  import SortingBar from '@/components/common/button/sorting-bar.vue';
-  import PagePagination from '@/components/common/button/page-pagination.vue';
+import { ref, computed, onMounted } from 'vue';
+import { useProductStore } from '@/store/products';
+import MainProduct from '@/components/view/products/main-product.vue';
+import SortingBar from '@/components/common/button/sorting-bar.vue';
+import PagePagination from '@/components/common/button/page-pagination.vue';
 
-  const productStore = useProductStore();
+const productStore = useProductStore();
 
-  const selectedFilter = ref('all');
-  const currentPage = ref(1);
-  const itemsPerPage = 9;
+const currentPage = ref(1);
+const itemsPerPage = 9;
 
-  onMounted(async () => {
-    await productStore.getProducts();
-  });
+const sortProduct = async (value) => {
+  await productStore.getProducts(value);
+};
 
-  const filterSelect = (value) => {
-    selectedFilter.value = value;
-  };
+const products = computed(() => productStore.productsWithImages);
 
-  const products = computed(() =>
-    productStore.sortProducts(selectedFilter.value)
-  );
+const paginatedProducts = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return products.value.slice(start, start + itemsPerPage);
+});
 
-  const paginatedProducts = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    return products.value.slice(start, start + itemsPerPage);
-  });
+onMounted(async () => {
+  await productStore.getProducts('all');
+});
+
 </script>
 
 <style scoped lang="scss">
