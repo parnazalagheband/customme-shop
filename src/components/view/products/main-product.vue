@@ -2,9 +2,9 @@
   <div class="product">
     <div class="product__image-container">
       <img
-        v-if="product?.image"
+        v-if="product?.images"
         class="product__image"
-        :src="product.image"
+        :src="product.images[2].url"
         :alt="product.name || 'Product Image'"
       />
       <img

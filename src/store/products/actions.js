@@ -9,6 +9,7 @@ export const actions = {
       this.products = response.data.data;
       this.images =
         response.data.included?.filter((item) => item.type === 'image') || [];
+      console.log(this.images);
 
       this.products = this.products.map((product) => {
         const imageId = product.relationships.images.data?.[0]?.id;
@@ -16,7 +17,7 @@ export const actions = {
         return {
           id: product.id,
           ...product.attributes,
-          image: image ? image.attributes.original_url : null,
+          images: image ? image.attributes.styles : null,
         };
       });
     } catch (error) {
@@ -27,7 +28,6 @@ export const actions = {
   },
 
   sortProducts(sortBy) {
-
     switch (sortBy) {
       case 'most_expensive':
         return [...this.products].sort(
