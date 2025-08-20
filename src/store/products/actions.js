@@ -1,7 +1,7 @@
 import api from '@/plugins/axios.js';
 
 export const actions = {
-  async getProducts(sortBy = 'all') {
+  async getProducts({ page = 1, perPage = 9, sortBy = 'all' } = {}) {
     this.loading = true;
     try {
       let sortParam = '';
@@ -24,6 +24,8 @@ export const actions = {
         params: {
           include: 'images',
           sort: sortParam || undefined,
+          page,
+          per_page: perPage,
         },
       });
 
@@ -40,6 +42,8 @@ export const actions = {
           images: image ? image.attributes.styles : [],
         };
       });
+
+      this.totalPages = response.data.meta?.total_pages || 1;
     } catch (error) {
       console.error(error);
     } finally {

@@ -31,29 +31,21 @@
 </template>
 
 <script setup>
-  import { defineProps, defineEmits, computed } from 'vue';
+  import { defineProps, defineEmits, ref } from 'vue';
   import IconButton from '@/components/common/button/icon-button.vue';
 
+  const currentPage = ref(1);
+
+  const emits = defineEmits(['changePage']);
+
   const props = defineProps({
-    totalItems: { type: Number, required: true },
-    itemsPerPage: { type: Number, required: true },
-    modelValue: { type: Number, default: 1 },
+    totalPages: { type: Number, required: true },
   });
-
-  const emits = defineEmits(['update:modelValue']);
-
-  const currentPage = computed({
-    get: () => props.modelValue,
-    set: (value) => emits('update:modelValue', value),
-  });
-
-  const totalPages = computed(() =>
-    Math.ceil(props.totalItems / props.itemsPerPage)
-  );
 
   const changePage = (page) => {
-    if (page >= 1 && page <= totalPages.value) {
+    if (page >= 1 && page <= props.totalPages) {
       currentPage.value = page;
+      emits('changePage', page);
     }
   };
 </script>
@@ -70,22 +62,22 @@
 
   .pages {
     @include flex($align: center);
-    gap:space(9);
-    padding:0 space(9);
+    gap: space(9);
+    padding: 0 space(9);
     border: 1px solid var(--palette-gray-4);
     border-radius: $radius-6x;
     height: 56px;
 
     &__btn {
-    border: 1px solid var(--palette-gray-8);
-    width:32px;
-    height: 32px;
-    border-radius: $circle;
+      border: 1px solid var(--palette-gray-8);
+      width: 32px;
+      height: 32px;
+      border-radius: $circle;
     }
 
     .pages__btn.active {
       background-color: var(--palette-tint-6);
-      border-color:var(--palette-tint-6) ;
+      border-color: var(--palette-tint-6);
     }
   }
 </style>
