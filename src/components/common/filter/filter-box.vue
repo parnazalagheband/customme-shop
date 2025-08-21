@@ -86,8 +86,11 @@
     for (const key in switchStates.value) {
       switchStates.value[key] = false;
     }
+    if (Object.keys(selectedFilters.value).length !== 0) {
+      selectedFilters.value = {};
+      emit('filter', selectedFilters.value);
+    }
     selectedFilters.value = {};
-    emit('filter', selectedFilters.value);
   };
 
   const switchToggle = (option, type, value) => {

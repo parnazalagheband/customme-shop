@@ -18,7 +18,7 @@
             :product="product"
           />
         </template>
-        <empty-products v-else />
+        <empty-products v-if="!products?.length && !productStore.loading" />
       </div>
 
       <PagePagination
