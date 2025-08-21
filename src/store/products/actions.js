@@ -52,7 +52,7 @@ export const actions = {
         return {
           id: product.id,
           ...product.attributes,
-          images: image ? image.attributes.styles : [],
+          images: image ? image.attributes : [],
         };
       });
 

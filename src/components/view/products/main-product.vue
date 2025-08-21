@@ -4,7 +4,7 @@
       <img
         v-if="product?.images"
         class="product__image"
-        :src="product.images[2].url"
+        :src="product.images.styles[2].url"
         :alt="product.name || 'Product Image'"
       />
       <img
@@ -47,14 +47,7 @@
   });
 
   const likeStatus = ref(false);
-  const truncate = (text, length) => {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.innerHTML = text;
-    return div.textContent.length > length
-      ? ' ... ' + div.textContent.substring(0, length)
-      : div.textContent;
-  };
+
 </script>
 
 <style scoped lang="scss">
