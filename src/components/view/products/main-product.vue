@@ -20,11 +20,12 @@
         <base-heart v-model="likeStatus" />
         <span>{{ product.name }}</span>
       </div>
-      <div class="product-info__description">
-        {{ truncate(product.description, 35) }}
-      </div>
+      <div v-html="product.description" class="product-info__description"></div>
       <div class="product-info__price">
-        <base-button :disabled="!product.purchasable" class="product-info__buy" variant="outlined"
+        <base-button
+          :disabled="!product.purchasable"
+          class="product-info__buy"
+          variant="outlined"
           >خرید</base-button
         >
         <span>{{ product.display_price }}</span>
@@ -61,11 +62,11 @@
     border: 1px solid var(--palette-gray-5);
     border-radius: $radius-4x;
     padding: space(4);
-    flex: 0 0 calc(33.333% - #{space(4)}); 
+    flex: 0 0 calc(33.333% - #{space(4)});
     max-width: calc(33.333% - #{space(4)});
 
     &__image-container {
-      width:100%;
+      width: 100%;
       height: 100%;
       overflow: hidden;
       border-radius: $radius-2x;
@@ -92,13 +93,17 @@
     }
 
     &__description {
-      @include typography(body-4);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      direction: ltr;
+      text-overflow: ellipsis;
     }
 
     &__price {
       @include typography(heading-5);
-      width:100%;
-      @include flex($justify: space-between, $align:center);
+      width: 100%;
+      @include flex($justify: space-between, $align: center);
     }
 
     &__buy {
