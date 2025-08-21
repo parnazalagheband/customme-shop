@@ -5,15 +5,24 @@
     </div>
     <div class="container__products-wrapper products-wrapper">
       <sorting-bar @select="sortProducts" />
-      <div class="products-wrapper__product-list product-list">
-        <MainProduct
-          v-for="product in products"
-          :key="product.id"
-          :product="product"
-        />
+      <div
+        :class="[
+          'products-wrapper__product-list product-list',
+          { 'product-list_empty': !products?.length },
+        ]"
+      >
+        <template v-if="products?.length > 0">
+          <MainProduct
+            v-for="product in products"
+            :key="product.id"
+            :product="product"
+          />
+        </template>
+        <empty-products v-else />
       </div>
 
       <PagePagination
+        v-if="products?.length > 0"
         class="product-list__pagination"
         :total-pages="productStore.totalPages"
         v-model="currentPage"
@@ -30,6 +39,7 @@
   import SortingBar from '@/components/common/button/sorting-bar.vue';
   import PagePagination from '@/components/common/button/page-pagination.vue';
   import FilterBox from '@/components/common/filter/filter-box.vue';
+  import EmptyProducts from '@/components/view/products/empty-products.vue';
 
   const productStore = useProductStore();
 
@@ -44,7 +54,7 @@
       page,
       perPage: itemsPerPage,
       sortBy: sortBy.value,
-      filters:filterOption.value,
+      filters: filterOption.value,
     });
     products.value = productStore.products;
   };
@@ -67,7 +77,7 @@
 <style scoped lang="scss">
   .container {
     @include flex();
-    gap:space(5);
+    gap: space(5);
     padding: space(30);
 
     &__products-wrapper {
@@ -91,6 +101,10 @@
 
     &__pagination {
       margin-top: space(10);
+    }
+
+    &_empty {
+      @include flex($justify: center, $align: center);
     }
   }
 </style>

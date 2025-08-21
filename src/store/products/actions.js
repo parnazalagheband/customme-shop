@@ -23,7 +23,7 @@ export const actions = {
         default:
           sortParam = '';
       }
-  
+
       const filterParams = {};
       for (const type in filters) {
         if (filters[type].length > 0) {
