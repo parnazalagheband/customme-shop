@@ -33,6 +33,7 @@
     left:0;
     gap:space(10);
     padding: space(7) space(23);
+     z-index: 1000;
 
     &__logo-container {
       min-width: 135px;
