@@ -112,6 +112,7 @@ const buttonVariantClasses = computed(() => {
 
   &_text {
     background-color: transparent;
+    padding:0;
   }
 
   &:disabled {

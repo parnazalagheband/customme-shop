@@ -29,7 +29,7 @@
       type: String,
       default: 'filled',
       validator(value) {
-        const styleTypes = ['filled', 'outlined'];
+        const styleTypes = ['filled', 'outlined','text'];
         return styleTypes.includes(value);
       },
     },
@@ -56,6 +56,9 @@
       color: var(--palette-white);
     }
 
+    &_text{
+      color: var(--base-icon-button-color);
+    }
 
     &_outlined {
       color: var(--base-icon-button-color);
