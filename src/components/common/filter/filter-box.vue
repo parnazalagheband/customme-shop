@@ -51,11 +51,16 @@
 </template>
 
 <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, watch } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
+  import qs from 'qs';
   import BaseButton from '@/components/common/button/base-button.vue';
   import IconButton from '@/components/common/button/icon-button.vue';
   import BaseSwitch from '@/components/common/input/base-switch.vue';
   import { useProductStore } from '@/store/products';
+
+  const route = useRoute();
+  const router = useRouter();
 
   const emit = defineEmits(['filter']);
   const productStore = useProductStore();
@@ -72,14 +77,12 @@
     }
   };
 
-  const initSwitchStates = () => {
-    const obj = {};
+  const initialSwitch = () => {
     productStore.filterOptions?.option_types.forEach((item) => {
       item.option_values.forEach((option) => {
-        obj[option.id] = false;
+        switchStates.value[option.id] = false;
       });
     });
-    switchStates.value = obj;
   };
 
   const resetFilters = () => {
@@ -88,11 +91,18 @@
     }
     if (Object.keys(selectedFilters.value).length !== 0) {
       selectedFilters.value = {};
+      router.replace({
+        query: {
+          ...route.query,
+          filters: undefined,
+        },
+      });
       emit('filter', selectedFilters.value);
     }
     selectedFilters.value = {};
   };
 
+  
   const switchToggle = (option, type, value) => {
     switchStates.value[option.id] = value;
     if (!selectedFilters.value[type]) {
@@ -110,12 +120,49 @@
         delete selectedFilters.value[type];
     }
     console.log(selectedFilters.value);
+    router.replace({
+      query: {
+        ...route.query,
+        filters:
+          Object.keys(selectedFilters.value).length > 0
+            ? qs.stringify(selectedFilters.value, { arrayFormat: 'brackets' })
+            : undefined,
+      },
+    });
+
     emit('filter', selectedFilters.value);
   };
 
-  onMounted(() => {
-    initSwitchStates();
-  });
+  const initialized = ref(false);
+
+  watch(
+    () => productStore.filterOptions,
+    (newVal) => {
+      if (!newVal?.option_types?.length || initialized.value) return;
+
+      initialSwitch();
+
+      if (route.query.filters) {
+        const filters = qs.parse(route.query.filters);
+        selectedFilters.value = filters;
+
+        for (const type in filters) {
+          filters[type].forEach((optionName) => {
+            const option = newVal.option_types
+              .find((item) => item.name === type)
+              ?.option_values.find((o) => o.name === optionName);
+
+            if (option) switchStates.value[option.id] = true;
+          });
+        }
+
+        emit('filter', selectedFilters.value);
+      }
+
+      initialized.value = true;
+    },
+    { immediate: true }
+  );
 </script>
 
 <style scoped lang="scss">
