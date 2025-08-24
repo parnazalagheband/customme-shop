@@ -23,6 +23,7 @@
       <div v-html="product.description" class="product-info__description"></div>
       <div class="product-info__price">
         <base-button
+          @click="addToCart(product)"
           :disabled="!product.purchasable"
           class="product-info__buy"
           variant="outlined"
@@ -36,8 +37,12 @@
 
 <script setup>
   import { ref } from 'vue';
+  import { useProductStore } from '@/store/products';
   import BaseHeart from '@/components/common/button/base-heart.vue';
   import BaseButton from '@/components/common/button/base-button.vue';
+  import { toast } from '@/plugins/toast';
+
+  const productStore = useProductStore();
 
   defineProps({
     product: {
@@ -48,6 +53,10 @@
 
   const likeStatus = ref(false);
 
+  const addToCart = (product) => {
+    productStore.addToCart(product);
+    toast.success('محصول به سبدخرید اضافه شد');
+  };
 </script>
 
 <style scoped lang="scss">

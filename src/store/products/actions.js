@@ -63,4 +63,32 @@ export const actions = {
       this.loading = false;
     }
   },
+
+  addToCart(product) {
+    const foundProduct = this.cartProducts.find((p) => p.id === product.id);
+
+    if (foundProduct) {
+      foundProduct.counter += 1;
+    } else {
+      this.cartProducts.push({ ...product, counter: 1 });
+    }
+
+    localStorage.setItem('cartProducts', JSON.stringify(this.cartProducts));
+  },
+
+  removeFromCart(product) {
+    this.cartProducts = this.cartProducts.filter(
+      (item) => item.id !== product.id
+    );
+    localStorage.setItem('cartProducts', JSON.stringify(this.cartProducts));
+  },
+
+  updateCounter(product, newCounter) {
+    const foundProduct = this.cartProducts.find((p) => p.id === product.id);
+    if (foundProduct) {
+      foundProduct.counter = newCounter;
+    }
+    
+    localStorage.setItem('cartProducts', JSON.stringify(this.cartProducts));
+  },
 };

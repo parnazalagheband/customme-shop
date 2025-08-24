@@ -10,6 +10,7 @@
       ورود | ثبت نام
     </base-button>
     <base-button
+    @click="router.push({name:'product-cart'})"
       leading-icon="shopping-cart"
       leading-icon-style-type="outlined"
     >
@@ -21,6 +22,8 @@
 <script setup>
   import SearchBox from '@/components/common/input/search-box.vue';
   import BaseButton from '@/components/common/button/base-button.vue';
+  import {useRouter} from 'vue-router';
+  const router = useRouter();
 </script>
 
 <style scoped lang="scss">

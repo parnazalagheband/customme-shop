@@ -16,7 +16,8 @@
     "qs": "^6.14.0",
     "vee-validate": "^4.12.6",
     "vue": "^3.4.21",
-    "vue-router": "^4.2.2"
+    "vue-router": "^4.2.2",
+    "vue3-toastify": "^0.2.8"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",

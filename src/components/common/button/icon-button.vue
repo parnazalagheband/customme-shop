@@ -10,7 +10,7 @@
 
 <script setup>
   import { computed } from 'vue';
-  import BaseIcon from '@/components/common/icon/base-icon.vue'
+  import BaseIcon from '@/components/common/icon/base-icon.vue';
 
   const props = defineProps({
     iconName: {
@@ -21,7 +21,7 @@
       type: String,
       default: 'outlined',
       validator(value) {
-        const variants = ['filled', 'outlined'];
+        const variants = ['filled', 'outlined', 'text', 'rounded'];
         return variants.includes(value);
       },
     },
@@ -29,12 +29,11 @@
       type: String,
       default: 'filled',
       validator(value) {
-        const styleTypes = ['filled', 'outlined','text'];
+        const styleTypes = ['filled', 'outlined'];
         return styleTypes.includes(value);
       },
     },
   });
-
 
   const iconButtonClasses = computed(() => {
     const classList = ['icon-button', `icon-button_${props.variant}`];
@@ -48,7 +47,7 @@
     width: 24px;
     height: 24px;
     border-radius: $circle;
-    padding:space(1);
+    padding: space(1);
     cursor: pointer;
 
     &_filled {
@@ -56,13 +55,19 @@
       color: var(--palette-white);
     }
 
-    &_text{
+    &_text {
       color: var(--base-icon-button-color);
     }
 
     &_outlined {
       color: var(--base-icon-button-color);
       border: 1px solid var(--base-icon-button-color);
+      border-radius:$radius-2x;
+    }
+
+    &_outlined {
+      color: var(--base-icon-button-color);
+      border: 2px solid var(--base-icon-button-color);
     }
 
     &:disabled {
@@ -71,7 +76,7 @@
     }
 
     &__icon {
-      --base-icon-size: 1.5rem;
+      --base-icon-size: var(--base-icon-button-size, 24px);
     }
   }
 </style>

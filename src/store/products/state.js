@@ -3,5 +3,6 @@ export const state = () => ({
   filterOptions:null,
   totalPages:null,
   images:[],
+  cartProducts: JSON.parse(localStorage.getItem('cartProducts')) || [],
   loading: false,
 });

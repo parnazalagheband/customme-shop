@@ -12,7 +12,7 @@
         ]"
       >
         <template v-if="products?.length > 0">
-          <MainProduct
+          <main-product
             v-for="product in products"
             :key="product.id"
             :product="product"
