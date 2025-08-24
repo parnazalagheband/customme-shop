@@ -133,12 +133,15 @@
     emit('filter', selectedFilters.value);
   };
 
-  const initialized = ref(false);
+
+
+
+  const initial = ref(false);
 
   watch(
     () => productStore.filterOptions,
-    (newVal) => {
-      if (!newVal?.option_types?.length || initialized.value) return;
+    (newValue) => {
+      if (!newValue?.option_types?.length || initial.value) return;
 
       initialSwitch();
 
@@ -148,9 +151,9 @@
 
         for (const type in filters) {
           filters[type].forEach((optionName) => {
-            const option = newVal.option_types
+            const option = newValue.option_types
               .find((item) => item.name === type)
-              ?.option_values.find((o) => o.name === optionName);
+              ?.option_values.find((item) => item.name === optionName);
 
             if (option) switchStates.value[option.id] = true;
           });
@@ -159,7 +162,7 @@
         emit('filter', selectedFilters.value);
       }
 
-      initialized.value = true;
+      initial.value = true;
     },
     { immediate: true }
   );

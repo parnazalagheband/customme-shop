@@ -33,46 +33,55 @@
 </template>
 
 <script setup>
-  import { ref, onMounted } from 'vue';
-  import { useProductStore } from '@/store/products';
-  import MainProduct from '@/components/view/products/main-product.vue';
-  import SortingBar from '@/components/common/button/sorting-bar.vue';
-  import PagePagination from '@/components/common/button/page-pagination.vue';
-  import FilterBox from '@/components/common/filter/filter-box.vue';
-  import EmptyProducts from '@/components/view/products/empty-products.vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import qs from 'qs';
+import { useProductStore } from '@/store/products';
+import MainProduct from '@/components/view/products/main-product.vue';
+import SortingBar from '@/components/common/button/sorting-bar.vue';
+import PagePagination from '@/components/common/button/page-pagination.vue';
+import FilterBox from '@/components/common/filter/filter-box.vue';
+import EmptyProducts from '@/components/view/products/empty-products.vue';
 
-  const productStore = useProductStore();
+const productStore = useProductStore();
+const route = useRoute();
 
-  const itemsPerPage = 9;
-  const products = ref();
-  const sortBy = ref('all');
-  const currentPage = ref(1);
-  const filterOption = ref({});
+const itemsPerPage = 9;
+const products = ref();
+const sortBy = ref('all');
+const currentPage = ref(1);
+const filterOption = ref({});
 
-  const getProducts = async (page = 1) => {
-    await productStore.getProducts({
-      page,
-      perPage: itemsPerPage,
-      sortBy: sortBy.value,
-      filters: filterOption.value,
-    });
-    products.value = productStore.products;
-  };
+const getProducts = async (page = 1) => {
+  await productStore.getProducts({
+    page,
+    perPage: itemsPerPage,
+    sortBy: sortBy.value,
+    filters: filterOption.value,
+  });
+  products.value = productStore.products;
+};
 
-  const sortProducts = async (sortValue) => {
-    sortBy.value = sortValue;
-    currentPage.value = 1;
-    await getProducts(1);
-  };
+const sortProducts = async (sortValue) => {
+  sortBy.value = sortValue;
+  currentPage.value = 1;
+  await getProducts(1);
+};
 
-  const filterProducts = async (option) => {
-    currentPage.value = 1;
-    filterOption.value = option;
-    await getProducts(1);
-  };
+const filterProducts = async (option) => {
+  currentPage.value = 1;
+  filterOption.value = option;
+  await getProducts(1);
+};
 
-  onMounted(() => getProducts());
+onMounted(() => {
+  if (route.query.filters) {
+    filterOption.value = qs.parse(route.query.filters);
+  }
+  getProducts();
+});
 </script>
+
 
 <style scoped lang="scss">
   .container {
