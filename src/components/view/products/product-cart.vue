@@ -71,7 +71,7 @@
 
   const removeFromCart = (product) => {
     productStore.removeFromCart(product);
-     toast.success('محصول از سبدخرید حذف شد')
+     toast.success('محصول از سبد خرید حذف شد')
   };
 
   const changeCounter = (val) => {
