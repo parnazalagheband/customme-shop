@@ -12,6 +12,7 @@
     <base-button
     @click="router.push({name:'product-cart'})"
       leading-icon="shopping-cart"
+      :badge-value="productStore.totalCount"
       leading-icon-style-type="outlined"
     >
       سبد خرید
@@ -20,9 +21,11 @@
 </template>
 
 <script setup>
+  import { useProductStore } from '@/store/products';
   import SearchBox from '@/components/common/input/search-box.vue';
   import BaseButton from '@/components/common/button/base-button.vue';
   import {useRouter} from 'vue-router';
+   const productStore = useProductStore();
   const router = useRouter();
 </script>
 

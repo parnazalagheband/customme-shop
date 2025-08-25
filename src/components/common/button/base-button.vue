@@ -1,6 +1,7 @@
 <template>
   <button :class="buttonVariantClasses" :disabled="disabled">
     <div class="button__content">
+      <div v-if="badgeValue !== null && badgeValue !== undefined" class="button__badge">{{ badgeValue }}</div>
       <base-icon
         class="button__leading-icon"
         v-if="leadingIcon"
@@ -44,6 +45,10 @@
       type: Boolean,
       default: false,
     },
+    badgeValue: {
+      type: [Number, String],
+      default: null,
+    },
   });
 
   const paddings = computed(() => ({
@@ -58,6 +63,7 @@
 
 <style lang="scss" scoped>
   .button {
+    position:relative;
     @include typography(button-2);
     border-radius: $radius-2x;
     height: 40px;
@@ -73,6 +79,27 @@
       flex-shrink: 0;
       --base-icon-size: 1.5rem;
       color: var(--palette-gray-9);
+    }
+
+    &__leading-icon{
+      position:relative;
+    }
+
+    &__badge{
+      @include flex($align:center,$justify:center);
+      font-size:10px;
+      font-weight: 700;
+      position:absolute;
+      top:0px;
+      right:0px;
+      width: 16px;
+      height: 16px;
+      border-radius:$circle;
+      color:var(--palette-gray-10);
+      background-color: var(--palette-tint-5);
+      padding:space(1);
+      line-height: 1;
+      z-index:1;
     }
 
     padding-left: v-bind('paddings.trailing');
@@ -94,7 +121,7 @@
       border: 1px solid var(--base-button-color);
       &:hover {
         background-color: var(--base-button-color);
-        color:var(--palette-white);
+        color: var(--palette-white);
       }
     }
 
