@@ -2,11 +2,14 @@
   <div class="container">
     <div class="products-cart">
       <div class="products-cart-header">سبد خرید</div>
-      <product-cart
-        v-for="product in productStore.cartProducts"
-        :key="product.id"
-        :product="product"
-      />
+      <div v-if="productStore.cartProducts.length">
+        <product-cart
+          v-for="product in productStore.cartProducts"
+          :key="product.id"
+          :product="product"
+        />
+      </div>
+      <div v-else class="product-cart-empty">سبد خرید شما خالی است.</div>
     </div>
   </div>
 </template>
@@ -34,5 +37,11 @@
     @include typography(body-3);
     padding: space(2) space(6);
     border-bottom: 1px solid var(--palette-gray-4);
+  }
+
+  .product-cart-empty {
+    @include typography(body-3);
+    text-align: center;
+    color: var(--palette-gray-9);
   }
 </style>
