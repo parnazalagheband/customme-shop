@@ -14,6 +14,7 @@
     <div
       v-for="item in productStore.filterOptions?.option_types"
       :key="item.id"
+      @click="changeShow(item.id)"
       class="filter-container__filter-options filter-options"
       :class="{ 'filter-options_remove-border': showList.includes(item.id) }"
     >
@@ -28,7 +29,6 @@
 
         <icon-button
           :class="{ 'filter-options_open': showList.includes(item.id) }"
-          @click="changeShow(item.id)"
           styleType="filled"
           iconName="arrow-down"
         />
@@ -196,6 +196,7 @@
 
   .filter-options {
     border-bottom: 2px solid var(--palette-gray-4);
+    cursor:pointer;
 
     &_remove-border {
       border-bottom: none;
