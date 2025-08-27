@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <div class="header__logo-container">
+    <div @click="router.push({name:'product-list'})" class="header__logo-container">
       <img class="header__logo" src="@/assets/images/logo.png" />
     </div>
     <div class="header__search-box">
@@ -43,6 +43,7 @@
 
     &__logo-container {
       min-width: 135px;
+      cursor:pointer;
     }
 
     &__search-box{
