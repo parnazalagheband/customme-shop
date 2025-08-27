@@ -50,6 +50,7 @@ export const actions = {
         const imageId = product.relationships.images.data?.[0]?.id;
         const image = this.images.find((img) => img.id === imageId);
         return {
+          counter: 0,
           id: product.id,
           ...product.attributes,
           images: image ? image.attributes : [],
@@ -64,18 +65,6 @@ export const actions = {
     }
   },
 
-  addToCart(product) {
-    const foundProduct = this.cartProducts.find((p) => p.id === product.id);
-
-    if (foundProduct) {
-      foundProduct.counter += 1;
-    } else {
-      this.cartProducts.push({ ...product, counter: 1 });
-    }
-
-    localStorage.setItem('cartProducts', JSON.stringify(this.cartProducts));
-  },
-
   removeFromCart(product) {
     this.cartProducts = this.cartProducts.filter(
       (item) => item.id !== product.id
@@ -87,8 +76,12 @@ export const actions = {
     const foundProduct = this.cartProducts.find((p) => p.id === product.id);
     if (foundProduct) {
       foundProduct.counter = newCounter;
+      if (newCounter === 0) {
+        this.removeFromCart(product);
+      }
+    } else {
+      this.cartProducts.push({ ...product, counter: newCounter });
     }
-    
     localStorage.setItem('cartProducts', JSON.stringify(this.cartProducts));
   },
 };

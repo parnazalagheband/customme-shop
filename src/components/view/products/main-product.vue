@@ -22,13 +22,12 @@
       </div>
       <div v-html="product.description" class="product-info__description"></div>
       <div class="product-info__price">
-        <base-button
-          @click="addToCart(product)"
-          :disabled="!product.purchasable"
-          class="product-info__buy"
-          variant="outlined"
-          >خرید</base-button
-        >
+        <counter-input
+          v-model="productCounter"
+          @update:model-value="changeCounter"
+          :min="0"
+          :max="5"
+        />
         <span>{{ product.display_price }}</span>
       </div>
     </div>
@@ -39,12 +38,12 @@
   import { ref } from 'vue';
   import { useProductStore } from '@/store/products';
   import BaseHeart from '@/components/common/button/base-heart.vue';
-  import BaseButton from '@/components/common/button/base-button.vue';
-  import { toast } from '@/plugins/toast';
+  import counterInput from '@/components/common/input/counter-input.vue';
+  // import { toast } from '@/plugins/toast';
 
   const productStore = useProductStore();
 
-  defineProps({
+  const props = defineProps({
     product: {
       type: Object,
       required: true,
@@ -52,10 +51,10 @@
   });
 
   const likeStatus = ref(false);
+  const productCounter = ref(productStore.getProductCounter(props.product.id));
 
-  const addToCart = (product) => {
-    productStore.addToCart(product);
-    toast.success('محصول به سبدخرید اضافه شد');
+  const changeCounter = (val) => {
+    productStore.updateCounter(props.product, val);
   };
 </script>
 
@@ -106,10 +105,6 @@
       @include typography(heading-5);
       width: 100%;
       @include flex($justify: space-between, $align: center);
-    }
-
-    &__buy {
-      --base-button-color: var(--palette-primary);
     }
   }
 </style>

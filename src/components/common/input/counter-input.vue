@@ -39,7 +39,7 @@ import { computed } from 'vue'
 import IconButton from '@/components/common/button/icon-button.vue'
 
 const props = defineProps({
-  modelValue: { type: Number, default: 1 },
+  modelValue: { type: Number, default: 0 },
   min: { type: Number, default: 1 },
   max: { type: Number, default: 10 },
 })
