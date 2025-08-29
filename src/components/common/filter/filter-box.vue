@@ -14,17 +14,12 @@
     <div
       v-for="item in productStore.filterOptions?.option_types"
       :key="item.id"
-      @click="changeShow(item.id)"
       class="filter-container__filter-options filter-options"
       :class="{ 'filter-options_remove-border': showList.includes(item.id) }"
     >
-      <div class="filter-options__option-types option-types">
-        <span class="option-types__title" v-if="item.name === 'color'"
-          >رنگ</span
-        >
-        <span class="option-types__title" v-else-if="item.name === 'size'"
-          >سایز</span
-        >
+      <div @click="changeShow(item.id)" class="filter-options__option-types option-types">
+        <span class="option-types__title" v-if="item.name === 'color'">رنگ</span>
+        <span class="option-types__title" v-else-if="item.name === 'size'">سایز</span>
         <span class="option-types__title" v-else>{{ item.name }}</span>
 
         <icon-button
@@ -51,121 +46,83 @@
 </template>
 
 <script setup>
-  import { ref, watch } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
-  import qs from 'qs';
-  import BaseButton from '@/components/common/button/base-button.vue';
-  import IconButton from '@/components/common/button/icon-button.vue';
-  import BaseSwitch from '@/components/common/input/base-switch.vue';
-  import { useProductStore } from '@/store/products';
+import { ref, watch } from 'vue';
+import BaseButton from '@/components/common/button/base-button.vue';
+import IconButton from '@/components/common/button/icon-button.vue';
+import BaseSwitch from '@/components/common/input/base-switch.vue';
+import { useProductStore } from '@/store/products';
 
-  const route = useRoute();
-  const router = useRouter();
+const productStore = useProductStore();
+const emit = defineEmits(['update:modelValue']);
 
-  const emit = defineEmits(['filter']);
-  const productStore = useProductStore();
+const props = defineProps({
+  modelValue: { type: Object, default: () => ({}) }
+});
 
-  const showList = ref([]);
-  const switchStates = ref({});
-  const selectedFilters = ref({});
+const showList = ref([]);
+const switchStates = ref({});
 
-  const changeShow = (id) => {
-    if (showList.value.includes(id)) {
-      showList.value = showList.value.filter((el) => el !== id);
-    } else {
-      showList.value.push(id);
-    }
-  };
+const changeShow = (id) => {
+  if (showList.value.includes(id)) {
+    showList.value = showList.value.filter((el) => el !== id);
+  } else {
+    showList.value.push(id);
+  }
+};
 
-  const initialSwitch = () => {
-    productStore.filterOptions?.option_types.forEach((item) => {
-      item.option_values.forEach((option) => {
-        switchStates.value[option.id] = false;
-      });
+const initialSwitch = () => {
+  productStore.filterOptions?.option_types.forEach((item) => {
+    item.option_values.forEach((option) => {
+      switchStates.value[option.id] = false;
     });
-  };
+  });
+};
 
-  const resetFilters = () => {
-    for (const key in switchStates.value) {
-      switchStates.value[key] = false;
+const resetFilters = () => {
+  for (const key in switchStates.value) {
+    switchStates.value[key] = false;
+  }
+  emit('update:modelValue', {});
+};
+
+const switchToggle = (option, type, value) => {
+  switchStates.value[option.id] = value;
+  const updatedFilters = { ...props.modelValue };
+
+  if (!updatedFilters[type]) updatedFilters[type] = [];
+
+  if (value) {
+    if (!updatedFilters[type].includes(option.name)) {
+      updatedFilters[type].push(option.name);
     }
-    if (Object.keys(selectedFilters.value).length !== 0) {
-      selectedFilters.value = {};
-      router.replace({
-        query: {
-          ...route.query,
-          filters: undefined,
-        },
+  } else {
+    updatedFilters[type] = updatedFilters[type].filter(
+      (el) => el !== option.name
+    );
+    if (updatedFilters[type].length === 0) delete updatedFilters[type];
+  }
+
+  emit('update:modelValue', updatedFilters);
+};
+
+watch(
+  [() => props.modelValue, () => productStore.filterOptions],
+  ([newValue, newOptions]) => {
+    if (!newOptions?.option_types?.length) return;
+    initialSwitch();
+    for (const type in newValue) {
+      newValue[type].forEach((optionName) => {
+        const option = newOptions.option_types
+          .find((item) => item.name === type)
+          ?.option_values.find((item) => item.name === optionName);
+
+        if (option) switchStates.value[option.id] = true;
       });
-      emit('filter', selectedFilters.value);
     }
-    selectedFilters.value = {};
-  };
+  },
+  { immediate: true, deep: true }
+);
 
-  
-  const switchToggle = (option, type, value) => {
-    switchStates.value[option.id] = value;
-    if (!selectedFilters.value[type]) {
-      selectedFilters.value[type] = [];
-    }
-    if (value) {
-      if (!selectedFilters.value[type]?.includes(option.name)) {
-        selectedFilters.value[type]?.push(option.name);
-      }
-    } else {
-      selectedFilters.value[type] = selectedFilters.value[type].filter(
-        (el) => el !== option.name
-      );
-      if (selectedFilters.value[type].length === 0)
-        delete selectedFilters.value[type];
-    }
-    console.log(selectedFilters.value);
-    router.replace({
-      query: {
-        ...route.query,
-        filters:
-          Object.keys(selectedFilters.value).length > 0
-            ? qs.stringify(selectedFilters.value, { arrayFormat: 'brackets' })
-            : undefined,
-      },
-    });
-
-    emit('filter', selectedFilters.value);
-  };
-
-
-
-
-  const initial = ref(false);
-
-  watch(
-    () => productStore.filterOptions,
-    (newValue) => {
-      if (!newValue?.option_types?.length || initial.value) return;
-
-      initialSwitch();
-
-      if (route.query.filters) {
-        const filters = qs.parse(route.query.filters);
-        selectedFilters.value = filters;
-
-        for (const type in filters) {
-          filters[type].forEach((optionName) => {
-            const option = newValue.option_types
-              .find((item) => item.name === type)
-              ?.option_values.find((item) => item.name === optionName);
-
-            if (option) switchStates.value[option.id] = true;
-          });
-        }
-
-        emit('filter', selectedFilters.value);
-      }
-
-      initial.value = true;
-    },
-    { immediate: true }
-  );
 </script>
 
 <style scoped lang="scss">

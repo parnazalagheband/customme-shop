@@ -5,7 +5,7 @@
       :key="option.value"
       class="filter-bar__btn"
       @click="selectFilter(option.value)"
-      :active="selectedFilter === option.value"
+      :active="props.modelValue === option.value"
       variant="underline"
     >
       {{ option.label }}
@@ -14,11 +14,13 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
   import BaseButton from '@/components/common/button/base-button.vue';
 
-  const emit = defineEmits(['select']);
+ const emit = defineEmits(['update:modelValue']);
 
+  const props = defineProps({
+    modelValue: { type: String, default: 'all' },
+  });
   const options = [
     { label: 'همه', value: 'all' },
     { label: 'گران‌ترین', value: 'most_expensive' },
@@ -26,11 +28,8 @@
     { label: 'جدیدترین', value: 'newest' },
   ];
 
-  const selectedFilter = ref('all');
-
   const selectFilter = (value) => {
-    selectedFilter.value = value;
-    emit('select', value);
+    emit('update:modelValue', value);
   };
 </script>
 

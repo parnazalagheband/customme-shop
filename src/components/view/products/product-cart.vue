@@ -84,6 +84,7 @@
 <style scoped lang="scss">
   .product {
     border-bottom: 1px solid var(--palette-gray-4);
+    margin-top:space(6);
   }
   .product-info-box {
     &__info {
