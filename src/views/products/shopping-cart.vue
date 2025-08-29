@@ -11,11 +11,13 @@
       </div>
       <div v-else class="product-cart-empty">سبد خرید شما خالی است.</div>
     </div>
+    <order-invoice class="order-invoice" />
   </div>
 </template>
 
 <script setup>
   import ProductCart from '@/components/view/products/product-cart.vue';
+  import OrderInvoice from '@/components/view/products/order-invoice.vue';
   import { useProductStore } from '@/store/products';
 
   const productStore = useProductStore();
@@ -23,14 +25,17 @@
 
 <style scoped lang="scss">
   .container {
-    padding: space(30);
+    @include flex();
+    gap: space(6);
+    padding: space(30) space(24);
   }
 
   .products-cart {
-    display: flex;
     width: 70%;
-    flex-direction: column;
-    gap: space(6);
+  }
+
+  .order-invoice {
+    width: 30%;
   }
 
   .products-cart-header {

@@ -78,7 +78,7 @@
     &__trailing-icon {
       flex-shrink: 0;
       --base-icon-size: 1.5rem;
-      color: var(--palette-gray-9);
+      color: var(--base-icon-button-color);
     }
 
     &__leading-icon{
