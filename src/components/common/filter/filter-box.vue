@@ -169,6 +169,7 @@ watch(
 
   .option-types {
     @include flex($align: center, $justify: space-between);
+    padding:space(2);
 
     &__title {
       @include typography(body-4);
