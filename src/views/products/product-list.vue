@@ -59,7 +59,6 @@ const sortBy = ref('all');
 const currentPage = ref(1);
 const selectedFilters = ref({});
 
-
 const getProducts = async (page = currentPage.value) => {
   await productStore.getProducts({
     page,
@@ -70,6 +69,18 @@ const getProducts = async (page = currentPage.value) => {
   products.value = productStore.products;
 };
 
+
+const updateQuery = (page = currentPage.value) => {
+  router.replace({
+    query: {
+      filters: Object.keys(selectedFilters.value).length
+        ? qs.stringify(selectedFilters.value, { arrayFormat: 'brackets' })
+        : undefined,
+      sortBy: sortBy.value,
+      page,
+    },
+  });
+};
 
 onMounted(() => {
   if (route.query.filters) {
@@ -84,49 +95,23 @@ onMounted(() => {
   getProducts(currentPage.value);
 });
 
-
 const changeFilter = async (newFilters) => {
   selectedFilters.value = newFilters;
   currentPage.value = 1;
-  router.replace({
-    query: {
-      filters: Object.keys(newFilters).length
-        ? qs.stringify(newFilters, { arrayFormat: 'brackets' })
-        : undefined,
-      sortBy: sortBy.value,
-      page: currentPage.value,
-    },
-  });
+  updateQuery(currentPage.value);
   await getProducts(currentPage.value);
 };
 
 const changeSort = async (newSort) => {
   sortBy.value = newSort;
   currentPage.value = 1;
-  router.replace({
-    query: {
-      filters: Object.keys(selectedFilters.value).length
-        ? qs.stringify(selectedFilters.value, { arrayFormat: 'brackets' })
-        : undefined,
-      sortBy: newSort,
-      page: currentPage.value,
-    },
-  });
+  updateQuery(currentPage.value);
   await getProducts(currentPage.value);
 };
 
-
 const changePage = async (page) => {
   currentPage.value = page;
-  router.replace({
-    query: {
-      filters: Object.keys(selectedFilters.value).length
-        ? qs.stringify(selectedFilters.value, { arrayFormat: 'brackets' })
-        : undefined,
-      sortBy: sortBy.value,
-      page,
-    },
-  });
+  updateQuery(page);
   await getProducts(page);
 };
 </script>
