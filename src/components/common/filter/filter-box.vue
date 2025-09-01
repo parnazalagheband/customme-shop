@@ -78,6 +78,20 @@ const initialSwitch = () => {
   });
 };
 
+const setSwitches = (modelValue, optionTypes) => {
+  Object.entries(modelValue).forEach(([filterType, selectedOptions]) => {
+    const type = optionTypes.find(item => item.name === filterType)
+    if (!type) return
+
+    selectedOptions.forEach(optionName => {
+      const option = type.option_values.find(option => option.name === optionName)
+      if (option) {
+        switchStates.value[option.id] = true
+      }
+    })
+  })
+}
+
 const resetFilters = () => {
   for (const key in switchStates.value) {
     switchStates.value[key] = false;
@@ -110,19 +124,11 @@ watch(
   ([newValue, newOptions]) => {
     if (!newOptions?.option_types?.length) return;
     initialSwitch();
-    for (const type in newValue) {
-      newValue[type].forEach((optionName) => {
-        const option = newOptions.option_types
-          .find((item) => item.name === type)
-          ?.option_values.find((item) => item.name === optionName);
-
-        if (option) switchStates.value[option.id] = true;
-      });
-    }
+    setSwitches(newValue, newOptions.option_types);
+    console.log(newValue);
   },
   { immediate: true, deep: true }
 );
-
 </script>
 
 <style scoped lang="scss">

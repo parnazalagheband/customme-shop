@@ -79,7 +79,6 @@ export const actions = {
 
   updateCounter(product, newCounter) {
     const foundProduct = this.cartProducts.find((p) => p.id === product.id);
-
     if (!foundProduct) return;
   
     foundProduct.counter = newCounter;
