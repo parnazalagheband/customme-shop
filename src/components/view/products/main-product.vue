@@ -22,7 +22,16 @@
       </div>
       <div v-html="product.description" class="product-info__description"></div>
       <div class="product-info__price">
+        <base-button
+          @click="addToCart(product)"
+          v-show="productCounter === 0"
+          :disabled="!product.purchasable"
+          class="product-info__buy"
+          variant="outlined"
+          >خرید</base-button
+        >
         <counter-input
+          v-show="productCounter !== 0"
           v-model="productCounter"
           @update:model-value="changeCounter"
           :min="0"
@@ -35,11 +44,12 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { useProductStore } from '@/store/products';
   import BaseHeart from '@/components/common/button/base-heart.vue';
   import counterInput from '@/components/common/input/counter-input.vue';
-  // import { toast } from '@/plugins/toast';
+  import BaseButton from '@/components/common/button/base-button.vue';
+  import { toast } from '@/plugins/toast';
 
   const productStore = useProductStore();
 
@@ -51,10 +61,18 @@
   });
 
   const likeStatus = ref(false);
-  const productCounter = ref(productStore.getProductCounter(props.product.id));
+
+  const productCounter = computed(() =>
+    productStore.getProductCounter(props.product.id)
+  );
 
   const changeCounter = (val) => {
     productStore.updateCounter(props.product, val);
+  };
+
+  const addToCart = (product) => {
+    productStore.addToCart(product);
+    toast.success('محصول به سبدخرید اضافه شد');
   };
 </script>
 
@@ -105,6 +123,10 @@
       @include typography(heading-5);
       width: 100%;
       @include flex($justify: space-between, $align: center);
+    }
+
+    &__buy {
+      --base-button-color: var(--palette-primary);
     }
   }
 </style>

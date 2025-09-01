@@ -66,7 +66,7 @@
     position:relative;
     @include typography(button-2);
     border-radius: $radius-2x;
-    height: 40px;
+    height: 32px;
     --base-icon-size: 1.125rem;
     color: var(--base-button-color);
     cursor: pointer;

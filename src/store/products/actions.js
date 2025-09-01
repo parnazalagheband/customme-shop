@@ -72,16 +72,21 @@ export const actions = {
     localStorage.setItem('cartProducts', JSON.stringify(this.cartProducts));
   },
 
+  addToCart(product) {
+    this.cartProducts.push({ ...product, counter: 1 });
+    localStorage.setItem('cartProducts', JSON.stringify(this.cartProducts));
+  },
+
   updateCounter(product, newCounter) {
     const foundProduct = this.cartProducts.find((p) => p.id === product.id);
-    if (foundProduct) {
-      foundProduct.counter = newCounter;
-      if (newCounter === 0) {
-        this.removeFromCart(product);
-      }
-    } else {
-      this.cartProducts.push({ ...product, counter: newCounter });
+
+    if (!foundProduct) return;
+  
+    foundProduct.counter = newCounter;
+    if (newCounter === 0) {
+      this.removeFromCart(product);
     }
+
     localStorage.setItem('cartProducts', JSON.stringify(this.cartProducts));
   },
 };
